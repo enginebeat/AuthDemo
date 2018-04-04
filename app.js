@@ -11,6 +11,7 @@ mongoose.connect('mongodb://localhost/auth_demo_app');
 
 var app = express();
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -31,6 +32,17 @@ app.get('/secret', (req, res)=>{
 
 app.post('/register', (req, res)=>{
     res.send('REGISTER POST ROUTE');
+    req.body.username;
+    req.body.password;
+    User.register(new User({username: req.body.username}), req.body.password, function(err, user){
+        if(err){
+            console.log(err);
+            return res.render('register');
+        };
+        passport.authenticate('local')(req, res, ()=>{
+            res.redirect('/secret');
+        });
+    });
 });
 
 //notice the inline require
