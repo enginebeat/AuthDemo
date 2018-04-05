@@ -50,16 +50,11 @@ app.post('/register', (req, res)=>{
             console.log(err);
             return res.render('register');
         }
-        console.log('Success!');
         passport.authenticate('local')(req, res, ()=>{
            res.redirect('/secret');
         });
     });
 });
-
-
-//app.use(passport.initialize());
-//app.use(passport.session());
 
 // LOGIN ROUTES
 //render login form
@@ -84,10 +79,7 @@ app.get('/logout', (req, res)=>{
 
 
 function isLoggedIn(req, res, next){
-    console.log('in isloggedIn');
-    console.log(req.isAuthenticated());
     if(req.isAuthenticated()){
-        console.log('in the IF');
         return next();
     }
     res.redirect('/login');
