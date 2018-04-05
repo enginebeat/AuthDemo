@@ -12,6 +12,17 @@ mongoose.connect('mongodb://localhost/auth_demo_app');
 var app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
+
+/* Order of These is important KEEP IT THIS WAY
+Need to check a bit closer Why...
+*/
+//notice the inline require
+app.use(require('express-session')({
+    secret: "I love Susana",
+    resave: false,
+    saveUninitialized: false
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -46,12 +57,9 @@ app.post('/register', (req, res)=>{
     });
 });
 
-//notice the inline require
-app.use(require('express-session')({
-    secret: "I love Susana",
-    resave: false,
-    saveUninitialized: false
-}));
+
+//app.use(passport.initialize());
+//app.use(passport.session());
 
 // LOGIN ROUTES
 //render login form
@@ -68,6 +76,7 @@ app.post('/login', passport.authenticate('local', {
 
 });
 
+// Logout Route
 app.get('/logout', (req, res)=>{
     req.logout();
     res.redirect('/');
@@ -75,7 +84,10 @@ app.get('/logout', (req, res)=>{
 
 
 function isLoggedIn(req, res, next){
+    console.log('in isloggedIn');
+    console.log(req.isAuthenticated());
     if(req.isAuthenticated()){
+        console.log('in the IF');
         return next();
     }
     res.redirect('/login');
