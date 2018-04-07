@@ -86,7 +86,7 @@ function isLoggedIn(req, res, next){
 }
 
 
-app.listen(8000,()=>{
+app.listen(8000, '0.0.0.0', ()=>{
     console.log('server started on port 8000');
     
 });
